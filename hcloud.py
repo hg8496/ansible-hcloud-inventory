@@ -8,7 +8,7 @@ def main():
     api_key = os.environ.get('HCLOUD_TOKEN')
     hosts = []
     hostvars = {}
-    root = { 'hetznercloud': {'hosts': hosts}, '_meta': { 'hostvars': hostvars }}
+    root = { 'hcloud': {'hosts': hosts}, '_meta': { 'hostvars': hostvars }}
     url = 'https://api.hetzner.cloud/v1/servers'
     headers = {'Authorization': 'Bearer ' + api_key}
 
