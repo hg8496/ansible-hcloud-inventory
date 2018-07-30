@@ -18,7 +18,7 @@ def main():
         hosts.append(server_name)
         hostvars[server_name] = fill_host_vars(server)
         add_to_datacenter(root, server)
-    print json.dumps(root)
+    print(json.dumps(root))
 
 def fill_host_vars(server):
     return {
