@@ -18,6 +18,7 @@ def main():
         hosts.append(server_name)
         hostvars[server_name] = fill_host_vars(server)
         add_to_datacenter(root, server)
+        add_to_labels(root, server)
     print json.dumps(root)
 
 def fill_host_vars(server):
@@ -26,6 +27,7 @@ def fill_host_vars(server):
         'hcloud_server_type': server['server_type'],
         'hcloud_image': server['image']['name'],
         'hcloud_datacenter': server['datacenter']['name'],
+        'hcloud_labels': server['labels'],
     }
 
 def add_to_datacenter(root, server):
@@ -33,6 +35,12 @@ def add_to_datacenter(root, server):
     if not root.has_key(dc):
         root[dc] = []
     root[dc].append(server['name'])
+
+def add_to_labels(root, server):
+    for label in server['labels']:
+      if not root.has_key(label):
+          root[label] = []
+      root[label].append(server['name'])
 
 if __name__ == '__main__':
     main()
