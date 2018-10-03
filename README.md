@@ -15,6 +15,8 @@ all | contains all hosts
 hcloud | contains all hosts in Hetzner Cloud
 fsn1-dc8 | contains all hosts in datacenter Falkenstein
 nbg1-dc3 | contains all hosts in datacenter Nürnberg
+label1 | contains all hosts have "label1" label
+label1 | contains all hosts have "label2" label
 
 The host have the following hostvars 
 
@@ -24,3 +26,4 @@ ansible_host | Public IPv4 Adress
 hcloud_server_type | Servertype eg. CX11
 hcloud_image | Name of the used image
 hcloud_datacenter | Datacenter the server is running in
+hcloud_labels | Instance labels
