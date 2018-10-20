@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
+
 import json
 import requests
 import os
@@ -19,7 +21,7 @@ def main():
         hostvars[server_name] = fill_host_vars(server)
         add_to_datacenter(root, server)
         add_to_labels(root, server)
-    print json.dumps(root)
+    print(json.dumps(root))
 
 def fill_host_vars(server):
     return {
@@ -32,14 +34,14 @@ def fill_host_vars(server):
 
 def add_to_datacenter(root, server):
     dc = server['datacenter']['name']
-    if not root.has_key(dc):
+    if not dc in root:
         root[dc] = []
     root[dc].append(server['name'])
 
 def add_to_labels(root, server):
     for label in server['labels']:
       vlabel=label + '-' + server['labels'][label]
-      if not root.has_key(vlabel):
+      if not vlabel in root:
           root[vlabel] = []
       root[vlabel].append(server['name'])
 
