@@ -27,7 +27,7 @@ def fill_host_vars(server):
     return {
         'ansible_host': server['public_net']['ipv4']['ip'],
         'hcloud_server_type': server['server_type'],
-        'hcloud_image': server['image']['name'],
+        'hcloud_image': getattr(server['image'], 'name', ''),
         'hcloud_datacenter': server['datacenter']['name'],
         'hcloud_labels': server['labels'],
     }
