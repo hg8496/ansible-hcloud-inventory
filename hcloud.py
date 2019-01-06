@@ -5,9 +5,19 @@ from __future__ import print_function
 import json
 import requests
 import os
+import sys
 
 def main():
     api_key = os.environ.get('HCLOUD_TOKEN')
+    if not api_key:
+        try:
+            api_key = sys.argv[1]
+        except IndexError:
+            print(
+                "You should set api token, like HCLOUD_TOKEN environment "
+                "variable or set like first argument for script"
+            )
+            exit(1)
     hosts = []
     hostvars = {}
     root = { 'hcloud': {'hosts': hosts}, '_meta': { 'hostvars': hostvars }}
