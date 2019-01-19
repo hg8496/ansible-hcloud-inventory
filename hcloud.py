@@ -51,9 +51,9 @@ def add_to_datacenter(root, server):
 def add_to_labels(root, server):
     for label in server['labels']:
       vlabel=label + '-' + server['labels'][label]
-      if not vlabel in root:
-          root[vlabel] = []
-      root[vlabel].append(server['name'])
+      if not root.has_key(vlabel):
+          root[vlabel] = { 'hosts': [] }
+      root[vlabel]['hosts'].append(server['name'])
 
 if __name__ == '__main__':
     main()
