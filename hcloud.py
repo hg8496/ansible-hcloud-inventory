@@ -44,9 +44,9 @@ def fill_host_vars(server):
 
 def add_to_datacenter(root, server):
     dc = server['datacenter']['name']
-    if not dc in root:
-        root[dc] = []
-    root[dc].append(server['name'])
+    if not root.has_key(dc):
+        root[dc] = { 'hosts': [] }
+    root[dc]['hosts'].append(server['name'])
 
 def add_to_labels(root, server):
     for label in server['labels']:
