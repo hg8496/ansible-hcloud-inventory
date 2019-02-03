@@ -6,8 +6,12 @@ import json
 import requests
 import os
 import sys
-import ConfigParser
 import ipaddress
+
+try:
+    import ConfigParser
+except ImportError:
+    import configparser as ConfigParser
 
 
 def main():
@@ -60,14 +64,14 @@ def fill_host_vars(server, public_net):
 
 def add_to_datacenter(root, server):
     dc = server['datacenter']['name']
-    if not root.has_key(dc):
+    if dc not in root:
         root[dc] = { 'hosts': [] }
     root[dc]['hosts'].append(server['name'])
 
 def add_to_labels(root, server):
     for label in server['labels']:
       vlabel=label + '-' + server['labels'][label]
-      if not root.has_key(vlabel):
+      if vlabel not in root:
           root[vlabel] = { 'hosts': [] }
       root[vlabel]['hosts'].append(server['name'])
 
