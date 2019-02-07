@@ -19,9 +19,9 @@ def main():
     config_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'hcloud.ini')
     config.read(config_path)
     if config.has_option('hcloud', 'public_net'):
-        public_net = config.get('hcloud', 'public_net')
+        public_net_type = config.get('hcloud', 'public_net')
     else:
-        public_net = 'ipv4'
+        public_net_type = 'ipv4'
     api_key = os.environ.get('HCLOUD_TOKEN')
     if not api_key:
         try:
@@ -35,27 +35,38 @@ def main():
     hosts = []
     hostvars = {}
     root = { 'hcloud': {'hosts': hosts}, '_meta': { 'hostvars': hostvars }}
-    url = 'https://api.hetzner.cloud/v1/servers'
+    url = 'https://api.hetzner.cloud/v1/'
     headers = {'Authorization': 'Bearer ' + api_key}
 
-    r = requests.get(url, headers=headers)
+    r = requests.get(url + "servers", headers=headers)
     for server in r.json()['servers']:
         server_name = server['name']
         hosts.append(server_name)
-        hostvars[server_name] = fill_host_vars(server, public_net)
+        hostvars[server_name] = fill_host_vars(server, public_net_type, url, headers)
         add_to_datacenter(root, server)
         add_to_labels(root, server)
     print(json.dumps(root))
 
-def fill_host_vars(server, public_net):
-    ip = server['public_net'][public_net]['ip']
+def fill_host_vars(server, public_net_type, url, headers):
+    ip = server['public_net'][public_net_type]['ip']
     # In case op IPv6, set the IP to the first address of the assigned range.
-    if public_net == "ipv6":
+    if public_net_type == "ipv6":
         ansible_host = str(ipaddress.ip_network(ip)[1])
     else:
         ansible_host = ip
+    public_net = server['public_net']
+    floating_ips_ids = public_net['floating_ips']
+    public_net['floating_ips'] = {'ipv4': [], 'ipv6': []}
+    for id in floating_ips_ids:
+        r = requests.get(url + "floating_ips/{}".format(id), headers=headers)
+        floating_ip = r.json()['floating_ip']
+        ip_type = floating_ip['type']
+        ip = floating_ip['ip']
+        public_net['floating_ips'][ip_type].append(ip)
+
     return {
         'ansible_host': ansible_host,
+        'hcloud_public_net': public_net,
         'hcloud_server_type': server['server_type'],
         'hcloud_image': getattr(server['image'], 'name', ''),
         'hcloud_datacenter': server['datacenter']['name'],
