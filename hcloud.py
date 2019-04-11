@@ -7,6 +7,7 @@ import requests
 import os
 import sys
 import ipaddress
+import yaml
 
 try:
     import ConfigParser
@@ -22,7 +23,15 @@ def main():
         public_net_type = config.get('hcloud', 'public_net')
     else:
         public_net_type = 'ipv4'
-    api_key = os.environ.get('HCLOUD_TOKEN')
+    if len(sys.argv) > 1 and sys.argv[1].find('@') > -1:
+        with open(sys.argv[1].replace('@', ''), 'r') as stream:
+            try:
+                varfile = yaml.safe_load(stream)
+                api_key = varfile['hcloud_token']
+            except yaml.YAMLError as exc:
+                print(exc)
+    else:
+        api_key = os.environ.get('HCLOUD_TOKEN')
     if not api_key:
         try:
             api_key = sys.argv[1]
