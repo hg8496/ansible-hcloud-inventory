@@ -5,6 +5,11 @@ Usage:
 `HCLOUD_TOKEN=example ansible-playbook site.yml -u root -i hcloud.py`
 or
 `ansible-playbook site.yml -u root -i hcloud.py cloud_token`
+or
+`ansible-playbook site.yml -u root -i hcloud.py @cloud_token.yml`
+
+Token yaml file must contain 'hcloud_token' variable with token. This method allows that you use many of token or store token with vault.
+
 Dependencies:
 * requests(`apt install python-request`)
 
