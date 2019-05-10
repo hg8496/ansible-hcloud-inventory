@@ -23,6 +23,13 @@ def main():
         public_net_type = config.get('hcloud', 'public_net')
     else:
         public_net_type = 'ipv4'
+    if config.has_option('hcloud', 'per_page'):
+        per_page = config.get('hcloud', 'per_page')
+    else:
+        per_page = 25
+    if per_page > 50:
+        print("The per_page config option must not be greater than 50.")
+        exit(1)
     if len(sys.argv) > 1 and sys.argv[1].find('@') > -1:
         with open(sys.argv[1].replace('@', ''), 'r') as stream:
             try:
@@ -43,17 +50,22 @@ def main():
             exit(1)
     hosts = []
     hostvars = {}
+    page = 1
     root = { 'hcloud': {'hosts': hosts}, '_meta': { 'hostvars': hostvars }}
     url = 'https://api.hetzner.cloud/v1/'
     headers = {'Authorization': 'Bearer ' + api_key}
-
-    r = requests.get(url + "servers", headers=headers)
-    for server in r.json()['servers']:
-        server_name = server['name']
-        hosts.append(server_name)
-        hostvars[server_name] = fill_host_vars(server, public_net_type, url, headers)
-        add_to_datacenter(root, server)
-        add_to_labels(root, server)
+    while True:
+        r = requests.get(url + "servers?page=" + str(page) + "&per_page=" + str(per_page), headers=headers)
+        for server in r.json()['servers']:
+            server_name = server['name']
+            hosts.append(server_name)
+            hostvars[server_name] = fill_host_vars(server, public_net_type, url, headers)
+            add_to_datacenter(root, server)
+            add_to_labels(root, server)
+        if r.json()['meta']['pagination']['next_page'] is None:
+            break;
+        else:
+            page += 1
     print(json.dumps(root))
 
 def fill_host_vars(server, public_net_type, url, headers):
