@@ -19,10 +19,10 @@ Name | Description
 ---- | ----
 all | contains all hosts
 hcloud | contains all hosts in Hetzner Cloud
-fsn1-dc8 | contains all hosts in datacenter Falkenstein
-nbg1-dc3 | contains all hosts in datacenter Nürnberg
-label1-value1 | contains all hosts have label "label1"="value1"
-label1-value2 | contains all hosts have label "label1"="value2"
+fsn1_dc8 | contains all hosts in datacenter Falkenstein
+nbg1_dc3 | contains all hosts in datacenter Nürnberg
+label1_value1 | contains all hosts have label "label1"="value1"
+label1_value2 | contains all hosts have label "label1"="value2"
 
 The host have the following hostvars 
 

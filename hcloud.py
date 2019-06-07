@@ -95,14 +95,14 @@ def fill_host_vars(server, public_net_type, url, headers):
     }
 
 def add_to_datacenter(root, server):
-    dc = server['datacenter']['name']
+    dc = server['datacenter']['name'].rename("-", "_")
     if dc not in root:
         root[dc] = { 'hosts': [] }
     root[dc]['hosts'].append(server['name'])
 
 def add_to_labels(root, server):
     for label in server['labels']:
-      vlabel=label + '-' + server['labels'][label]
+      vlabel=label + '_' + server['labels'][label]
       if vlabel not in root:
           root[vlabel] = { 'hosts': [] }
       root[vlabel]['hosts'].append(server['name'])
