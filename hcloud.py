@@ -95,7 +95,7 @@ def fill_host_vars(server, public_net_type, url, headers):
     }
 
 def add_to_datacenter(root, server):
-    dc = server['datacenter']['name'].rename("-", "_")
+    dc = server['datacenter']['name'].replace("-", "_")
     if dc not in root:
         root[dc] = { 'hosts': [] }
     root[dc]['hosts'].append(server['name'])
