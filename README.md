@@ -28,7 +28,9 @@ The host have the following hostvars
 
 Name | Description
 ---- | ----
-ansible_host | Public IPv4 Adress
+ansible_host | Public or private IPv4 or IPv6 Address
+ansible_public_net | Public IPv4 Address
+ansible_private_net | Private IPv4 Address
 hcloud_server_type | Servertype eg. CX11
 hcloud_image | Name of the used image
 hcloud_datacenter | Datacenter the server is running in
