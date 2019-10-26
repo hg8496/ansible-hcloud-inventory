@@ -1,5 +1,5 @@
 # ansible-hcloud-inventory
-An dynamic inventory script for hetzner cloud
+A dynamic inventory script for hetzner cloud.
 
 Usage:
 `HCLOUD_TOKEN=example ansible-playbook site.yml -u root -i hcloud.py`
@@ -24,7 +24,7 @@ nbg1_dc3 | contains all hosts in datacenter Nürnberg
 label1_value1 | contains all hosts have label "label1"="value1"
 label1_value2 | contains all hosts have label "label1"="value2"
 
-The host have the following hostvars 
+The host has the following hostvars:
 
 Name | Description
 ---- | ----
@@ -35,3 +35,5 @@ hcloud_server_type | Servertype eg. CX11
 hcloud_image | Name of the used image
 hcloud_datacenter | Datacenter the server is running in
 hcloud_labels | Instance labels
+
+Check the [hcloud.ini](hcloud.ini) for a short explanation on how to use the ipv6 address of a server as or the private ip address of a server as value for `ansible_host`.
