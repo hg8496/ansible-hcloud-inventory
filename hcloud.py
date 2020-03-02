@@ -69,6 +69,12 @@ def main():
             break
         else:
             page += 1
+    
+    if config.has_section('hcloud.groupaliases'):
+        for groupalias, label_value in config.items('hcloud.groupaliases'):
+            if label_value in root:
+                root[groupalias] = root[label_value]
+
     print(json.dumps(root))
 
 
