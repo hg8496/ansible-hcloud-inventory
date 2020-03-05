@@ -37,3 +37,5 @@ hcloud_datacenter | Datacenter the server is running in
 hcloud_labels | Instance labels
 
 Check the [hcloud.ini](hcloud.ini) for a short explanation on how to use the ipv6 address of a server as or the private ip address of a server as value for `ansible_host`.
+
+In [hcloud.ini](hcloud.ini) it is also possible to add aliases for the label groups created. So instead of `DNS_true` you can use `dnsservers` as group identifier.
