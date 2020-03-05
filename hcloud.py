@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-from __future__ import print_function
-
 import json
 import requests
 import os
@@ -21,7 +19,7 @@ def main():
     config.read(config_path)
 
     # parse config
-    public_net_type = config.get('hcloud', 'public_net', fallback="ipv4")
+    public_net_type = config.get('hcloud', 'public_net', fallback='ipv4')
     use_private_ip = config.getboolean('hcloud', 'use_private_ip', fallback=False)
     private_net_index = config.getint('hcloud', 'private_net_index', fallback=0)
     per_page = config.getint('hcloud', 'per_page', fallback=25)
@@ -44,8 +42,8 @@ def main():
             api_key = sys.argv[1]
         except IndexError:
             print(
-                "You should set api token, like HCLOUD_TOKEN environment "
-                "variable or set like first argument for script"
+                "You should set api token in the HCLOUD_TOKEN environment "
+                "variable or set it as first argument to the script"
             )
             exit(1)
 
@@ -57,7 +55,7 @@ def main():
     url = 'https://api.hetzner.cloud/v1/'
     headers = {'Authorization': 'Bearer ' + api_key}
     while True:
-        r = requests.get(url + "servers?page=" + str(page) + "&per_page=" + str(per_page), headers=headers)
+        r = requests.get(url + 'servers?page=' + str(page) + '&per_page=' + str(per_page), headers=headers)
         for server in r.json()['servers']:
             server_name = server['name']
             hosts.append(server_name)
@@ -84,7 +82,7 @@ def fill_host_vars(server, public_net_type, use_private_ip, private_net_index, u
     else:
         ip = server['public_net'][public_net_type]['ip']
     # In case of IPv6, set the IP to the first address of the assigned range.
-    if public_net_type == "ipv6":
+    if public_net_type == 'ipv6':
         ansible_host = str(ipaddress.ip_network(ip)[1])
     else:
         ansible_host = ip
@@ -94,7 +92,7 @@ def fill_host_vars(server, public_net_type, use_private_ip, private_net_index, u
     floating_ips_ids = public_net['floating_ips']
     public_net['floating_ips'] = {'ipv4': [], 'ipv6': []}
     for ip_id in floating_ips_ids:
-        r = requests.get(url + "floating_ips/{}".format(ip_id), headers=headers)
+        r = requests.get(url + 'floating_ips/{}'.format(ip_id), headers=headers)
         floating_ip = r.json()['floating_ip']
         ip_type = floating_ip['type']
         ip = floating_ip['ip']
@@ -112,7 +110,7 @@ def fill_host_vars(server, public_net_type, use_private_ip, private_net_index, u
 
 
 def add_to_datacenter(root, server):
-    dc = server['datacenter']['name'].replace("-", "_")
+    dc = server['datacenter']['name'].replace('-', '_')
     if dc not in root:
         root[dc] = {'hosts': []}
     root[dc]['hosts'].append(server['name'])
