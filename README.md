@@ -11,7 +11,7 @@ or
 Token yaml file must contain 'hcloud_token' variable with token. This method allows that you use many of token or store token with vault.
 
 Dependencies:
-* requests(`apt install python-request`)
+* requests(`apt install python-request` or `pip install -r requirements.txt`)
 
 The inventory will consist of multiple groups:
 
